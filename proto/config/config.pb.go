@@ -512,7 +512,7 @@ func (x *configWatchStream) Send(m *WatchResponse) error {
 }
 
 func init() {
-	proto.RegisterFile("github.com/micro/config-srv/proto/config/config.proto", fileDescriptor0)
+	proto.RegisterFile("github.com/duanduan2288/config-srv/proto/config/config.proto", fileDescriptor0)
 }
 
 var fileDescriptor0 = []byte{
