@@ -300,14 +300,14 @@ var _ server.Option
 
 // Client API for Config service
 
-type ConfigClient interface {
+type ConfigService interface {
 	Create(ctx context.Context, in *CreateRequest, opts ...client.CallOption) (*CreateResponse, error)
 	Update(ctx context.Context, in *UpdateRequest, opts ...client.CallOption) (*UpdateResponse, error)
 	Delete(ctx context.Context, in *DeleteRequest, opts ...client.CallOption) (*DeleteResponse, error)
 	Search(ctx context.Context, in *SearchRequest, opts ...client.CallOption) (*SearchResponse, error)
 	Read(ctx context.Context, in *ReadRequest, opts ...client.CallOption) (*ReadResponse, error)
 	AuditLog(ctx context.Context, in *AuditLogRequest, opts ...client.CallOption) (*AuditLogResponse, error)
-	Watch(ctx context.Context, in *WatchRequest, opts ...client.CallOption) (Config_WatchClient, error)
+	Watch(ctx context.Context, in *WatchRequest, opts ...client.CallOption) (Config_WatchService, error)
 }
 
 type configClient struct {
@@ -315,14 +315,14 @@ type configClient struct {
 	serviceName string
 }
 
-func NewConfigClient(serviceName string, c client.Client) ConfigClient {
+func NewConfigService(serviceName string, c client.Client) ConfigService {
 	if c == nil {
 		c = client.NewClient()
 	}
 	if len(serviceName) == 0 {
 		serviceName = "go.micro.srv.config.config"
 	}
-	return &configClient{
+	return &ConfigService{
 		c:           c,
 		serviceName: serviceName,
 	}
@@ -388,7 +388,7 @@ func (c *configClient) AuditLog(ctx context.Context, in *AuditLogRequest, opts .
 	return out, nil
 }
 
-func (c *configClient) Watch(ctx context.Context, in *WatchRequest, opts ...client.CallOption) (Config_WatchClient, error) {
+func (c *configClient) Watch(ctx context.Context, in *WatchRequest, opts ...client.CallOption) (Config_WatchService, error) {
 	req := c.c.NewRequest(c.serviceName, "Config.Watch", &WatchRequest{})
 	stream, err := c.c.Stream(ctx, req, opts...)
 	if err != nil {
@@ -400,7 +400,7 @@ func (c *configClient) Watch(ctx context.Context, in *WatchRequest, opts ...clie
 	return &configWatchClient{stream}, nil
 }
 
-type Config_WatchClient interface {
+type Config_WatchService interface {
 	SendMsg(interface{}) error
 	RecvMsg(interface{}) error
 	Close() error
