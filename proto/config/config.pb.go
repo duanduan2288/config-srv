@@ -322,7 +322,7 @@ func NewConfigService(serviceName string, c client.Client) ConfigService {
 	if len(serviceName) == 0 {
 		serviceName = "go.micro.srv.config.config"
 	}
-	return &ConfigService{
+	return &configClient{
 		c:           c,
 		serviceName: serviceName,
 	}
